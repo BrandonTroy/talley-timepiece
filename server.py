@@ -1,16 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for
+from json import dumps, loads
 
 
 # create and initialize app
 app = Flask(__name__)
 app.timezone = 'America/New_York'
+with open('timezones.json') as file:
+    app.timezones = loads(file.read())
 app.alarms = []
 
 
 # index page
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', timezones=app.timezones, default=app.timezone)
 
 
 # request url to update the timezone, redirects to index
@@ -45,12 +48,13 @@ def remove_alarm():
     return redirect('/')
 
 
-
-
-if __name__ == '__main__':
-    # debug=True allows for error messages in browser and debug prints in terminal
-    # hosts on local ip
-    app.run(debug=True)
-
-    # hosts on public ip
-    # app.run('0.0.0.0', port=80, debug=True)
+# api used to fetch data from server
+@app.route('/api')
+def api():
+    return dumps({
+        'timezone': app.timezone,
+        'alarms': app.alarms
+    })
+    
+    
+# app.run(debug=True)

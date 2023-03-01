@@ -13,7 +13,15 @@
     <div id="time">11:11:59 am</div>
 
     <label for="timezone-dropdown">Timezone</label>
-    <select id="timezone-dropdown" title="timezone"></select>
+    <select id="timezone-dropdown" title="timezone">
+        {% for timezone in timezones %}
+            {% if timezone == default %}
+                <option value="{{ timezone }}" selected>{{ timezone|replace('_', ' ') }}</option>
+            {% else %}
+                <option value="{{ timezone }}">{{ timezone|replace('_', ' ') }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

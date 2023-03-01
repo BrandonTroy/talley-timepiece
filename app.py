@@ -16,7 +16,7 @@ app.alarms = []
 def tick():
     while True:
         dt = datetime.now(pytz.timezone(app.timezone))
-        print(str(dt.time())[:8])
+        print(dt.time().strftime("%I:%M:%S %p"))
         sleep(1)
 
 app.time_update_thread = threading.Thread(target=tick, daemon=True)
@@ -63,10 +63,7 @@ def remove_alarm():
     return redirect('/')
 
 
-if __name__ == '__main__':
-    # debug=True allows for error messages in browser and debug prints in terminal
-    # hosts on local ip
-    # app.run(debug=True)
-
-    # hosts on public ip
-    app.run('0.0.0.0', port=80, debug=False)
+# if __name__ == '__main__':
+#     # debug=True allows for error messages in browser and debug prints in terminal
+#     # hosts on local ip
+#     app.run(debug=True)

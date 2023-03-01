@@ -6,8 +6,9 @@ from alarm import Alarm
 from requests import get
 from json import loads
 
+
 class App:
-    SERVER_URL = 'http://localhost:5000'
+    SERVER_URL = 'https://talley-timepiece.vercel.app/'
     timezone = 'America/New_York'
     alarms: list[Alarm] = []
 
@@ -24,9 +25,13 @@ class App:
     # fetches the app data from the server
     def fetch():
         while True:
-            result = loads(get(App.SERVER_URL).text)
-            App.timezone = result['timezone']
-            App.alarms = list(map(Alarm.from_json, result['alarms']))
+            result = get(get(App.SERVER_URL + '/api'))
+            print("REQUEST:", result)
+            
+            data = loads(result.text)
+            App.timezone = data['timezone']
+            App.alarms = list(map(Alarm.from_json, data['alarms']))
+            
             sleep(3)
 
 
