@@ -1,3 +1,7 @@
+# DEPRICATED: This file was designed to run the server from the rasberry pi itself,
+# but it was decided that the server should be hosted virtually.
+
+
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.serving import is_running_from_reloader
 from datetime import datetime

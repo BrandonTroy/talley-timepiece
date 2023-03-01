@@ -8,11 +8,12 @@ from json import loads
 
 
 class App:
-    SERVER_URL = 'https://talley-timepiece.vercel.app/'
+    SERVER_URL = 'https://talley-timepiece.vercel.app'
     timezone = 'America/New_York'
     alarms: list[Alarm] = []
 
     def start():
+        Thread(target=App.fetch, daemon=True).start()
         App.tick()
     
     # updates the time every second based on the timezone
@@ -25,10 +26,11 @@ class App:
     # fetches the app data from the server
     def fetch():
         while True:
-            result = get(get(App.SERVER_URL + '/api'))
+            result = get(App.SERVER_URL + '/api')
             print("REQUEST:", result)
             
             data = loads(result.text)
+            print(data)
             App.timezone = data['timezone']
             App.alarms = list(map(Alarm.from_json, data['alarms']))
             

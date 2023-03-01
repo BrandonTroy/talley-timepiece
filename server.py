@@ -55,6 +55,3 @@ def api():
         'timezone': app.timezone,
         'alarms': app.alarms
     })
-    
-    
-# app.run(debug=True)
