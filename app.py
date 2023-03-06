@@ -4,23 +4,24 @@ from json import dumps, loads
 
 # create and initialize app
 app = Flask(__name__)
-app.timezone = 'America/New_York'
+app.timezone = "America/New_York"
 with open('timezones.json') as file:
     app.timezones = loads(file.read())
 app.alarms = []
 
 
 # index page
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', timezones=app.timezones, default=app.timezone)
+    return render_template('index.html', timezones=app.timezones, current_timezone=app.timezone)
 
 
 # request url to update the timezone, redirects to index
 @app.route('/update-timezone', methods=['POST'])
 def update_timezone():
     app.timezone = request.json['timezone']
-    print("TIMEZONE UPDATED TO:" , app.timezone)
+    print("TIMEZONE UPDATED TO:", app.timezone)
+    
     return redirect('/')
 
 
@@ -49,7 +50,7 @@ def remove_alarm():
 
 
 # api used to fetch data from server
-@app.route('/api')
+@app.route('/api', methods=['GET'])
 def api():
     return dumps({
         'timezone': app.timezone,
