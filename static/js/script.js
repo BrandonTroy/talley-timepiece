@@ -1,6 +1,9 @@
 const dropdown = document.getElementById("timezone-dropdown");
 // gets the timezone referenced in the the HTML, set by the flask server
 let currentTimezone = document.currentScript.getAttribute("data-timezone");
+// gets the last time the server pinged the client, set by the flask server
+let lastPing = document.currentScript.getAttribute("data-last-ping");
+
 
 
 // api request to get recommended timezone based on ip address
@@ -25,6 +28,31 @@ function updateTime() {
 }
 
 
+// syncs the client data with the server data
+function syncToServer() {
+    fetch("/api/client")
+        .then(response => response.json())
+        .then(json => {
+            if (json.timezone != currentTimezone) {
+                currentTimezone = json.timezone;
+                dropdown.value = currentTimezone;
+                updateTime();
+            }
+
+            lastPing = new Date(json.last_ping);
+            // checks if the clients hasn't pinged the server in 10 seconds
+            if (new Date() - lastPing > 10000) {
+                console.log("Pi is offline");
+            } else {
+                console.log("Pi is online");
+            }
+
+            
+            // TODO: update alarms
+        });
+}
+
+
 // updates the timezone when the dropdown is changed
 dropdown.addEventListener("change", event => {
     currentTimezone = dropdown.value;
@@ -41,6 +69,5 @@ dropdown.addEventListener("change", event => {
 
 // updates the displayed time every second
 setInterval(updateTime, 1000);
-
-// reloads the page every 30 seconds to detect whether or not the pi is live
-setTimeout(() => location.reload(), 30000);
+// updates client data every 5 seconds
+setInterval(syncToServer, 5000);

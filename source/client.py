@@ -28,7 +28,7 @@ class App:
     # fetches the app data from the server
     def fetch():
         while True:
-            result = get(App.SERVER_URL + '/api')
+            result = get(App.SERVER_URL + '/api/pi')
             print(fg(10), "REQUEST: ", result, attr('reset'), sep="")
             
             data = loads(result.text)

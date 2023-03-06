@@ -23,6 +23,6 @@
         {% endfor %}
     </select>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}" data-last-ping="{{ last_ping }}"></script>
 </body>
 </html>
