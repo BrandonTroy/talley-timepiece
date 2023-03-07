@@ -12,7 +12,7 @@
 
     <div id="time">12:00:00 PM</div>
 
-    <label for="timezone-dropdown">Timezone</label>
+    <label class="label" for="timezone-dropdown">Timezone</label>
     <select id="timezone-dropdown" title="timezone">
         {% for timezone in timezones %}
             {% if timezone == current_timezone %}
@@ -22,6 +22,40 @@
             {% endif %}
         {% endfor %}
     </select>
+    
+    <br>
+    <br>
+
+    <label class="label">Alarms</label>
+    <br>
+    <div class="alarm">
+        <input type="time" class="alarm-time" id="alarm-1-time" name="alarm-time" value="00:00:00">
+        <select class="alarm-days">
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+        </select>
+        <input type="checkbox" class="alarm-active" id="alarm-1-active" name="alarm-active" checked>
+        <label class="alarm-active-label" for="alarm-1-active">Active</label>
+    </div>
+    <div class="alarm">
+        <input type="time" class="alarm-time" id="alarm-1-time" name="alarm-time" value="00:00:00">
+        <select class="alarm-days">
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+        </select>
+        <input type="checkbox" class="alarm-active" id="alarm-1-active" name="alarm-active" checked>
+        <label class="alarm-active-label" for="alarm-1-active">Active</label>
+    </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}" data-last-ping="{{ last_ping }}"></script>
 </body>

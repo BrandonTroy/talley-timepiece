@@ -29,7 +29,7 @@ h1 {
     font-size: 3rem;
 }
 
-label {
+.label {
     display: block;
     width: fit-content;
     margin: 0 auto;
@@ -38,4 +38,27 @@ label {
 #timezone-dropdown {
     display: block;
     margin: 0.25rem auto;
+}
+
+
+.alarm {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.alarm-time {
+    margin-right: .75rem;
+}
+
+.alarm-days {
+    margin-right: .75rem;
+}
+
+.alarm-active {
+    margin-right: 0.3rem;
+}
+
+.alarm-active-label {
+    transform: translateY(0.15em);
 }
