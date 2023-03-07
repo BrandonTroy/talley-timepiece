@@ -9,6 +9,9 @@
 </head>
 <body>
     <h1>Talley Timepiece</h1>
+    
+    <div id="connected-status"> <ion-icon name="checkmark-circle"></ion-icon> &nbsp;Clock is connected</div>
+    <div id="disconnected-status"> <ion-icon name="close-circle"></ion-icon> &nbsp;Clock is offline</div>
 
     <div id="time">12:00:00 PM</div>
 
@@ -25,8 +28,9 @@
     
     <br>
     <br>
+    
 
-    <label class="label">Alarms</label>
+    <!-- <label class="label">Alarms</label>
     <br>
     <div class="alarm">
         <input type="time" class="alarm-time" id="alarm-1-time" name="alarm-time" value="00:00:00">
@@ -55,7 +59,12 @@
         </select>
         <input type="checkbox" class="alarm-active" id="alarm-1-active" name="alarm-active" checked>
         <label class="alarm-active-label" for="alarm-1-active">Active</label>
-    </div>
+    </div> -->
+
+
+    <!-- ionicons import -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}" data-last-ping="{{ last_ping }}"></script>
 </body>

@@ -20,12 +20,12 @@ body {
 
 h1 {
     width: fit-content;
-    margin: 2rem auto 4rem;
+    margin: 2rem auto 0.5rem;
 }
 
 #time {
     width: fit-content;
-    margin: 1rem auto;
+    margin: 4rem auto 1rem;
     font-size: 3rem;
 }
 
@@ -61,4 +61,29 @@ h1 {
 
 .alarm-active-label {
     transform: translateY(0.15em);
+}
+
+#connected-status {
+    color: rgb(95, 217, 64);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    display: none;
+}
+
+#disconnected-status {
+    color: rgb(217, 64, 64);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    display: none;
+}
+
+ion-icon {
+    width: 1rem;
+    height: 1rem;
 }
