@@ -22,9 +22,9 @@ class App:
     def tick():
         while True:
             t = datetime.now(pytz.timezone(App.timezone))
-            print(str(t.time())[:8])
-            # NEW - display the time on the LCD
-            App.display.lcd_display_string(str(t.time())[:8], 1)
+            time_string = datetime.strptime(t, "%-I:%M:%S %p")
+            print(time_string)
+            App.display.lcd_display_string(time_string, 1)
             sleep(1)
     
     # fetches the app data from the server
