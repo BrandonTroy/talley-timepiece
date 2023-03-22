@@ -22,7 +22,7 @@ class App:
     def tick():
         while True:
             t = datetime.now(pytz.timezone(App.timezone))
-            time_string = datetime.strptime(t, "%-I:%M:%S %p")
+            time_string = datetime.strftime(t, "%-I:%M:%S %p")
             print(time_string)
             App.display.lcd_display_string(time_string, 1)
             sleep(1)
