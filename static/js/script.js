@@ -26,7 +26,6 @@ fetch("https://worldtimeapi.org/api/ip/")
 // updates the time on the page
 function updateTime() {
     let time = new Date().toLocaleTimeString('en', {timeStyle: "medium", timeZone: currentTimezone});
-    if (time.length == 10) time = "0" + time;
     document.getElementById("time").innerHTML = time;
 }
 
