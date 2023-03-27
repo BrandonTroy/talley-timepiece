@@ -34,7 +34,7 @@
 import pygame
 
 pygame.mixer.init()
-sound = pygame.mixer.Sound('mixkit-rooster-crowing-in-the-morning-2462.wav')
+sound = pygame.mixer.Sound('small-audio.mp3')
 volume = 0.5
 
 for i in range(3):
