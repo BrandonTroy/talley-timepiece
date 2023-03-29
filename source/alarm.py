@@ -64,15 +64,15 @@ class Alarm:
                 self._snooze_event.clear()
                 self.snoozed = True
                 self.going_off = False
-                sleep(300)
+                sleep(5)
                 self.snoozed = False
                 self.go_off()
                 break
             self.going_off = True
             # play audio
-            #os.system("aplay audio.wav")
-            print(f"[ALARM {self.index} GOING OFF]")
-            sleep(1)   # (time that alarm sound would play for)
+            os.system("aplay mixkit-rooster-crowing-in-the-morning-2462.wav")
+            #print(f"[ALARM {self.index} GOING OFF]")
+            #sleep(1)   # (time that alarm sound would play for)
             self.going_off = False
         Alarm.current = None
     
