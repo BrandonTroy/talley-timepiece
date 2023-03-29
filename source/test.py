@@ -31,17 +31,20 @@
 
 
 
-import pygame
+import os, threading
 
-pygame.mixer.init()
-sound = pygame.mixer.Sound('small-audio.mp3')
-volume = 0.5
+event = threading.Event()
 
-for i in range(3):
-  sound.set_volume(volume)
-  playing = sound.play()
-  while playing.get_busy():
-    pygame.time.delay(100)
-  volume += 0.25
+def play():
+    for i in range(10):
+        if event.is_set(): break
+        os.system("aplay audio.wav")
 
-print("sound over")
+
+
+audio_thread = threading.Thread(target=play)
+audio_thread.start()
+
+
+input("press enter to stop")
+event.set()
