@@ -16,9 +16,9 @@ class App:
 
     @staticmethod
     def start():
-        # Thread(target=App.fetch, daemon=True).start()
+        Thread(target=App.fetch, daemon=True).start()
         Thread(target=App.input_listener, daemon=True).start()
-        App.alarms = [Alarm(datetime.now() + timedelta(minutes=1), [0, 1, 2, 3, 4], True)]
+        App.alarms = []
         App.tick()
     
     # updates the time every second based on the timezone
