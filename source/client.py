@@ -12,7 +12,7 @@ import RPi.GPIO as GPIO
 # initialze the GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
 class App:
@@ -62,10 +62,10 @@ class App:
     def input_listener():
         while True:
             # wait for button down press
-            while GPIO.input(12) == GPIO.LOW:
+            while GPIO.input(37) == GPIO.LOW:
                 pass
             # wait for button up press
-            while GPIO.input(12) == GPIO.HIGH:
+            while GPIO.input(37) == GPIO.HIGH:
                 pass
             if Alarm.current:
                 if Alarm.current.snoozed:     # type: ignore

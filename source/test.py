@@ -28,23 +28,33 @@
 #   print("Database version: {} ".format(version[0]))
 
 
+# from requests import get
+# import time
+# from json import loads
 
 
-
-import os, threading
-
-event = threading.Event()
-
-def play():
-    for i in range(10):
-        if event.is_set(): break
-        os.system("aplay audio.wav")
+# while True:
+#     result = get('https://talley-timepiece.vercel.app/api/pi')
+#     data = loads(result.text)
+#     print("REQUEST:", result)
+#     print(data)
+#     time.sleep(0.5)
 
 
+import RPi.GPIO as GPIO
 
-audio_thread = threading.Thread(target=play)
-audio_thread.start()
+GPIO.setwarnings(False) # Ignore warning for now
+GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
+GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be an input>
+
+while True: # Run forever
+    if GPIO.input(37) == GPIO.HIGH:
+        print("Button was pushed!")
 
 
-input("press enter to stop")
-event.set()
+#GPIO.setup(12, GPIO.OUT)
+#while True:
+#       GPIO.output(12, GPIO.LOW)
+
+#p = GPIO.PWM(12, 100)
+#p.start(1)
