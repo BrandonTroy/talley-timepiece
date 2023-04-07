@@ -7,6 +7,7 @@ import os
 class Alarm:
     counter = 0
     current = None
+    audio_file_path = "audio/mixkit-rooster-crowing-in-the-morning-2462.wav"
     
     def __init__(self, _time: datetime, days: list, active: bool):
         self.time = _time
@@ -25,21 +26,21 @@ class Alarm:
         """Converts a json object to an Alarm object.
         input format:
         {
-            'time': 'HH:MM:SS',
+            'time': 'HH:MM',
             'days': [0, 1, 2, 3, 4, 5, 6],
-            'active': True
+            'active': True/False
         }
         """
         return Alarm(
-            datetime.strptime(json['time'], "%H:%M:%S"),
-            json['days'],
+            datetime.strptime(json['time'], "%H:%M"),
+            [0, 1, 2, 3, 4, 5, 6],   # set active for all days
             json['active']
         )
     
     def go_off(self):
         """Plays the alarm sound 10 times or until:
-            - snoozed - waits snooze_duration and then calls this method again
-            - stopped - breaks out of the method and stops the alarm    
+            * snoozed - waits snooze_duration and then calls this method again
+            * stopped - breaks out of the method and stops the alarm    
         """       
         self.last_gone_off = time()
         # if an alarm is already going off do nothing, or if an alarm is snoozed replace it
@@ -70,9 +71,7 @@ class Alarm:
                 break
             self.going_off = True
             # play audio
-            os.system("aplay mixkit-rooster-crowing-in-the-morning-2462.wav")
-            #print(f"[ALARM {self.index} GOING OFF]")
-            #sleep(1)   # (time that alarm sound would play for)
+            os.system("aplay", Alarm.audio_file_path)
             self.going_off = False
         Alarm.current = None
     

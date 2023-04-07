@@ -28,27 +28,10 @@ def update_timezone():
     return redirect('/')
 
 
-# request url to add a new alarm, redirects to index
-@app.route('/add-alarm', methods=['POST'])
-def add_alarm():
-    # add alarm
-    print('ALARM ADDED:', request.args['alarm'])
-    return redirect('/')
-
-
-# request url to update an alarm, redirects to index
-@app.route('/update-alarm', methods=['POST'])
+# request url to update alarms, redirects to index
+@app.route('/update-alarms', methods=['POST'])
 def update_alarm():
-    # update alarm
-    print('ALARM UPDATED:', request.args['alarm'])
-    return redirect('/')
-
-
-# request url to remove an alarm, redirects to index
-@app.route('/remove-alarm', methods=['POST'])
-def remove_alarm():
-    # remove alarm
-    print('ALARM REMOVED:', request.args['alarm'])
+    app.alarms = [request.json['alarm1'], request.json['alarm2']]
     return redirect('/')
 
 

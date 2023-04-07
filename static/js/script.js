@@ -8,19 +8,36 @@ const dropdown = document.getElementById("timezone-dropdown");
 const connectedStatus = document.getElementById("connected-status");
 const disconnectedStatus = document.getElementById("disconnected-status");
 
+const alarm1Time = document.getElementById("alarm-1-time");
+// const alarm1Days = document.getElementById("alarm-1-days");
+const alarm1Active = document.getElementById("alarm-1-active");
+const alarm2Time = document.getElementById("alarm-2-time");
+// const alarm2Days = document.getElementById("alarm-2-days");
+const alarm2Active = document.getElementById("alarm-2-active");
+
 
 // api request to get recommended timezone based on ip address
-// TODO: refactor to no longer add a new option to the dropdown, but be a button that sets the timezone
-fetch("https://worldtimeapi.org/api/ip/")
-    .then(response => response.json())
-    .then(json => {
-        updateTime();
+fetch("https://ipapi.co/timezone")
+    .then(response => response.text())
+    .then(timezone => {
         const option = document.createElement("option");
-        option.value = json.timezone;
-        option.innerHTML = json.timezone.replaceAll("_", " ") + " (Recommended)";
+        option.value = timezone;
+        option.innerHTML = timezone.replaceAll("_", " ") + " (Recommended)";
         dropdown.prepend(option);
-        // dropdown.value = currentTimezone;
+    })
+    // backup if first api request fails
+    .catch(error => {
+        fetch("https://worldtimeapi.org/api/ip/")
+            .then(response => response.json())
+            .then(json => {
+                updateTime();
+                const option = document.createElement("option");
+                option.value = json.timezone;
+                option.innerHTML = json.timezone.replaceAll("_", " ") + " (Recommended)";
+                dropdown.prepend(option);
+            });
     });
+
 
 
 // updates the time on the page
@@ -53,12 +70,49 @@ function syncToServer() {
 
             lastPing = json.last_ping;
             updateConnectionStatus();
-            
-            // TODO: update alarms
+
+            if (json.alarms.length > 0) {
+                alarm1Time.value = json.alarms[0][0];
+                // alarm1Days.value = json.alarms[0][1];
+                alarm1Active.checked = json.alarms[0][2];
+            }
+            if (json.alarms.length > 1) {
+                alarm2Time.value = json.alarms[1][0];
+                // alarm2Days.value = json.alarms[1][1];
+                alarm2Active.checked = json.alarms[1][2];
+            }
         });
 }
 
 
+// updates the server with the local alarm data
+function sendAlarmData() {
+    fetch("/update-alarms", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            alarm1: [
+                alarm1Time.value,
+                null,
+                alarm1Active.checked
+            ],
+            alarm2: [
+                alarm2Time.value,
+                null,
+                alarm2Active.checked
+            ]
+        })
+    });
+}
+
+alarm1Time.addEventListener("change", sendAlarmData);
+// alarm1Days.addEventListener("change", sendAlarmData);
+alarm1Active.addEventListener("change", sendAlarmData);
+alarm2Time.addEventListener("change", sendAlarmData);
+// alarm2Days.addEventListener("change", sendAlarmData);
+alarm2Active.addEventListener("change", sendAlarmData);
 
 
 // updates the timezone when the dropdown is changed
@@ -75,8 +129,12 @@ dropdown.addEventListener("change", event => {
 });
 
 
+
+
 // updates the displayed time every second
+updateTime();
 setInterval(updateTime, 1000);
+
 // updates client data every 5 seconds
+syncToServer();
 setInterval(syncToServer, 5000);
-updateConnectionStatus();
