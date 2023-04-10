@@ -32,9 +32,9 @@ class Alarm:
         }
         """
         return Alarm(
-            datetime.strptime(json['time'], "%H:%M"),
+            datetime.strptime(json[0], "%H:%M"),
             [0, 1, 2, 3, 4, 5, 6],   # set active for all days
-            json['active']
+            json[2]
         )
     
     def go_off(self):
@@ -71,7 +71,7 @@ class Alarm:
                 break
             self.going_off = True
             # play audio
-            os.system("aplay", Alarm.audio_file_path)
+            os.system("aplay " + Alarm.audio_file_path)
             self.going_off = False
         Alarm.current = None
     
@@ -110,6 +110,3 @@ class Alarm:
     
     def __repr__(self):
         return repr(str(self))
-    
-    def __del__(self):
-        self.stop()

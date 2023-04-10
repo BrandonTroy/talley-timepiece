@@ -24,7 +24,6 @@ def index():
 def update_timezone():
     app.timezone = request.json['timezone']
     print('TIMEZONE UPDATED TO:', app.timezone)
-    
     return redirect('/')
 
 

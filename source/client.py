@@ -3,29 +3,36 @@ from datetime import datetime, timedelta
 import pytz
 from threading import Thread
 from alarm import Alarm
+from motor import Motor
 from requests import get
 from json import loads
 import drivers
 import RPi.GPIO as GPIO
 
 
+
+BUTTON_PIN = 37
+MOTOR_PINS = (18, 22, 24, 26)
+
 # initialze the GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(37, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    
+    
 class App:
     SERVER_URL = 'https://talley-timepiece.vercel.app'
     timezone = 'America/New_York'
     alarms: list[Alarm] = []
     display = drivers.Lcd()
+    #motor = Motor(MOTOR_PINS, 30)
 
+    # initializes app and starts threads
     @staticmethod
     def start():
         Thread(target=App.fetch, daemon=True).start()
         Thread(target=App.input_listener, daemon=True).start()
-        App.alarms = []
+        #Thread(target=App.motor.perpetuate, daemon=True).start()
         App.tick()
     
     # updates the time every second based on the timezone
@@ -52,26 +59,33 @@ class App:
             data = loads(result.text)
             App.timezone = data['timezone']
             Alarm.counter = 0
-            App.alarms = list(map(Alarm.from_json, data['alarms']))
+            # update alarms only if they have changed
+            alarms = list(map(Alarm.from_json, data['alarms']))
+            for i, alarm in enumerate(App.alarms):
+                if alarm != alarms[i]:
+                    alarm.stop()
+                    App.alarms[i] = alarms[i]
             print("REQUEST:", result)
             print(data)
-            sleep(3)
+            sleep(1)
     
     # listens for local input, specifically button presses
     @staticmethod
     def input_listener():
         while True:
-            # wait for button down press
+            # wait for button down press (rising edge)
             while GPIO.input(37) == GPIO.LOW:
                 pass
-            # wait for button up press
+            # process button press
+            if Alarm.current:
+                if Alarm.current.snoozed:
+                    Alarm.current.stop()
+                else:
+                    Alarm.current.snooze()
+            # wait for button up press (falling edge)
             while GPIO.input(37) == GPIO.HIGH:
                 pass
-            if Alarm.current:
-                if Alarm.current.snoozed:     # type: ignore
-                    Alarm.current.stop()      # type: ignore
-                else:
-                    Alarm.current.snooze()    # type: ignore
+            
 
 
 if __name__ == '__main__':
