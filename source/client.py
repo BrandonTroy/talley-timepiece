@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytz
 from threading import Thread
 from alarm import Alarm
-from motor import Motor
+#from motor import Motor
 from requests import get
 from json import loads
 import drivers
@@ -23,7 +23,10 @@ GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 class App:
     SERVER_URL = 'https://talley-timepiece.vercel.app'
     timezone = 'America/New_York'
-    alarms: list[Alarm] = []
+    alarms: list[Alarm] = [
+        Alarm.from_json(['00:00', None, False]),
+        Alarm.from_json(['00:00', None, False])
+    ]
     display = drivers.Lcd()
     #motor = Motor(MOTOR_PINS, 30)
 
