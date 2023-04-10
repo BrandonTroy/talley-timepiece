@@ -106,6 +106,7 @@ function sendAlarmData() {
         })
     });
 }
+sendAlarmData();
 
 alarm1Time.addEventListener("change", sendAlarmData);
 // alarm1Days.addEventListener("change", sendAlarmData);
