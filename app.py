@@ -103,6 +103,6 @@ def api_pi():
         'timezone': app.timezone,
         'alarms': app.alarms,
         'sound': app.alarm_sound,
-        'snooze': snooze,
-        'stop': stop
+        # 'snooze': snooze,
+        # 'stop': stop
     })
