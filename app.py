@@ -14,7 +14,7 @@ app.last_ping = datetime(1970, 1, 1)
 app.get_last_ping = lambda: app.last_ping.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 app.alarm_sounds = list(map(fsdecode, listdir(fsencode("source/audio"))))
 app.alarm_sound = "rooster.wav"
-app.going_off = True
+app.going_off = False
 app.snooze = False
 app.stop = False
 
@@ -40,6 +40,15 @@ def update_timezone():
 def update_alarm():
     app.alarms = [request.json['alarm1'], request.json['alarm2']]
     app.alarm_sound = request.json['sound']
+    return ''
+
+
+# recieves snooze command from web client
+@app.route('/go_off', methods=['POST'])
+def go_off():
+    app.going_off = True
+    app.snooze = False
+    app.stop = False
     return ''
 
 

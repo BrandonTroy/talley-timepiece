@@ -57,7 +57,7 @@ class App:
             result = get(App.SERVER_URL + '/api/pi')
             data = loads(result.text)
             App.timezone = data['timezone']
-            Alarm.audio_file_path = 'audio/' + data['alarm_sound']
+            Alarm.audio_file_path = 'audio/' + data['sound']
             Alarm.counter = 0
             # update alarms only if they have changed
             for i, alarm in enumerate(map(Alarm.from_json, data['alarms'])):

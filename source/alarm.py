@@ -2,7 +2,7 @@ from datetime import datetime
 from threading import Event
 from time import sleep, time
 import os
-
+from requests import post
 
 class Alarm:
     counter = 0
@@ -50,6 +50,7 @@ class Alarm:
             if Alarm.current is not self:
                 Alarm.current.stop()
         # start alarm
+        post('https://talley-timepiece.vercel.app/go_off')
         Alarm.current = self
         while True:
             # check for stop
