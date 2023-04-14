@@ -17,6 +17,7 @@ app.alarm_sound = "rooster.wav"
 app.going_off = False
 app.snooze = False
 app.stop = False
+app.is_snoozed = False
 
 
 # index page
@@ -48,6 +49,7 @@ def update_alarm():
 def go_off():
     app.going_off = True
     app.snooze = False
+    app.is_snoozed = False
     app.stop = False
     return ''
 
@@ -56,6 +58,7 @@ def go_off():
 @app.route('/snooze', methods=['POST'])
 def snooze():
     app.snooze = True
+    app.is_snoozed = True
     return ''
 
 
@@ -64,6 +67,7 @@ def snooze():
 def stop():
     app.stop = True
     app.snooze = False
+    app.is_snoozed = False
     app.going_off = False
     return ''
 
@@ -85,7 +89,7 @@ def api_client():
         'alarms': app.alarms,
         'last_ping': app.get_last_ping(),
         'going_off': app.going_off,
-        'snoozed': app.snooze,
+        'snooze': app.is_snoozed,
     })
 
 
@@ -93,10 +97,12 @@ def api_client():
 @app.route('/api/pi', methods=['GET'])
 def api_pi():
     app.last_ping = datetime.now()
+    snooze, stop = app.snooze, app.stop
+    app.snooze = app.stop = False
     return dumps({
         'timezone': app.timezone,
         'alarms': app.alarms,
         'sound': app.alarm_sound,
-        'snooze': app.snooze,
-        'stop': app.stop
+        'snooze': snooze,
+        'stop': stop
     })
