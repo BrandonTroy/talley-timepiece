@@ -76,9 +76,7 @@ class Alarm:
                 post(Alarm.SERVER_URL + '/set-going-off')
                 has_updated = True
             # play audio
-            print("PLAYING AUDIO")
-            sleep(1)
-            #os.system("aplay " + Alarm.audio_file_path)
+            os.system("aplay " + Alarm.audio_file_path)
             self.going_off = False
         Alarm.current = None
     
