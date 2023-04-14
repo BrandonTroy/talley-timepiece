@@ -80,15 +80,15 @@ class App:
         while True:
             # wait for button down press (rising edge)
             while GPIO.input(37) == GPIO.LOW:
-                sleep(0.1)
+               sleep(0.1)
             # process button press
             if Alarm.current:
                 if Alarm.current.snoozed:
                     Alarm.current.stop()
-                    post(App.SERVER_URL + '/stop')
+                    post(App.SERVER_URL + '/set-stopped')
                 else:
                     Alarm.current.snooze()
-                    post(App.SERVER_URL + '/snooze')
+                    post(App.SERVER_URL + '/set-snoozed')
             # wait for button up press (falling edge)
             while GPIO.input(37) == GPIO.HIGH:
                 sleep(0.1)
@@ -100,3 +100,4 @@ if __name__ == '__main__':
         App.start()
     except KeyboardInterrupt:
         GPIO.cleanup()
+        pass

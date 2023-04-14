@@ -5,6 +5,7 @@ import os
 from requests import post
 
 class Alarm:
+    SERVER_URL = 'https://talley-timepiece.vercel.app'
     counter = 0
     current = None
     audio_file_path = "audio/rooster.wav"
@@ -49,7 +50,8 @@ class Alarm:
                 return
             if Alarm.current is not self:
                 Alarm.current.stop()
-        post('https://talley-timepiece.vercel.app/go_off')
+        print("GO OFF CALLED")
+        has_updated = False
         Alarm.current = self
         while True:
             # check for stop
@@ -70,14 +72,20 @@ class Alarm:
                 self.go_off()
                 break
             self.going_off = True
+            if not has_updated:
+                post(Alarm.SERVER_URL + '/set-going-off')
+                has_updated = True
             # play audio
-            os.system("aplay " + Alarm.audio_file_path)
+            print("PLAYING AUDIO")
+            sleep(1)
+            #os.system("aplay " + Alarm.audio_file_path)
             self.going_off = False
         Alarm.current = None
     
     def snooze(self):
         """Sets the snooze event which is checked in the go_off method and snoozes the alarm"""
         self._snooze_event.set()
+        self.snoozed = True
         
     def stop(self):
         """Sets the snooze event which is checked in the go_off method and stops the alarm"""

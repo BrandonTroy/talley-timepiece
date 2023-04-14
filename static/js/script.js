@@ -53,7 +53,7 @@ function updateTime() {
 
 // checks if the clients hasn't pinged the server in 10 seconds
 function updateConnectionStatus() {
-    if (new Date() - new Date(lastPing) > 10000) {
+    if (lastPing > 10) {
         disconnectedStatus.style.display = "flex";
         connectedStatus.style.display = "none";
     } else {
@@ -68,25 +68,9 @@ function syncToServer() {
     fetch("/api/client")
         .then(response => response.json())
         .then(json => {
-            if (json.timezone != currentTimezone) {
-                currentTimezone = json.timezone;
-                dropdown.value = currentTimezone;
-                updateTime();
-            }
-
+            console.log(json);
             lastPing = json.last_ping;
             updateConnectionStatus();
-            
-            if (json.alarms.length > 0) {
-                alarm1Time.value = json.alarms[0][0];
-                // alarm1Days.value = json.alarms[0][1];
-                alarm1Active.checked = json.alarms[0][2];
-            }
-            if (json.alarms.length > 1) {
-                alarm2Time.value = json.alarms[1][0];
-                // alarm2Days.value = json.alarms[1][1];
-                alarm2Active.checked = json.alarms[1][2];
-            }
 
             if (json.going_off) {
                 buttons.style.visibility = "visible";
@@ -148,19 +132,47 @@ dropdown.addEventListener("change", event => {
 });
 
 
+// tells server to send snooze command to pi
 snoozeButton.addEventListener("click", event => {
     fetch("/snooze", { method: "POST" });
     snoozeButton.disabled = true;
 });
 
+// tells server to send stop command to pi
 stopButton.addEventListener("click", event => {
     fetch("/stop", { method: "POST" });
     buttons.style.visibility = "hidden";
 });
 
+// set the initial state of the buttons
+// initial snoozed state is handled in HTML template
 if (document.currentScript.getAttribute("data-going-off") === "False") {
     buttons.style.visibility = "hidden";
 }
+
+
+// get the initial state of the timezone and alarms on refresh
+fetch("/api/client")
+        .then(response => response.json())
+        .then(json => {
+            if (json.timezone != currentTimezone) {
+                currentTimezone = json.timezone;
+                dropdown.value = currentTimezone;
+                updateTime();
+            }
+
+            if (json.alarms.length > 0) {
+                alarm1Time.value = json.alarms[0][0];
+                // alarm1Days.value = json.alarms[0][1];
+                alarm1Active.checked = json.alarms[0][2];
+            }
+            if (json.alarms.length > 1) {
+                alarm2Time.value = json.alarms[1][0];
+                // alarm2Days.value = json.alarms[1][1];
+                alarm2Active.checked = json.alarms[1][2];
+            }
+        });
+
 
 
 // updates the displayed time every second
