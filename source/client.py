@@ -42,13 +42,6 @@ class App:
             # check for alarm needing to go off
             for alarm in App.alarms:
                 if alarm.active and alarm.compare_time(t) and (time() - alarm.last_gone_off) >= 60:
-                    # if an alarm is already going off do nothing, or if an alarm is snoozed replace it
-                    if Alarm.current:
-                        if Alarm.current.going_off:
-                            continue
-                        if Alarm.current is not alarm:
-                            Alarm.current.stop()
-                    post(App.SERVER_URL + '/go_off')
                     Thread(target=alarm.go_off, daemon=True).start()
             # update the display
             time_string = datetime.strftime(t, "%I:%M %p")

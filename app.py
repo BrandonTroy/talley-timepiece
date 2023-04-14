@@ -63,6 +63,7 @@ def snooze():
 @app.route('/stop', methods=['POST'])
 def stop():
     app.stop = True
+    app.snooze = False
     app.going_off = False
     return ''
 
@@ -92,12 +93,10 @@ def api_client():
 @app.route('/api/pi', methods=['GET'])
 def api_pi():
     app.last_ping = datetime.now()
-    snooze, stop = app.snooze, app.stop
-    app.snooze = app.stop = False
     return dumps({
         'timezone': app.timezone,
         'alarms': app.alarms,
         'sound': app.alarm_sound,
-        'snooze': snooze,
-        'stop': stop
+        'snooze': app.snooze,
+        'stop': app.stop
     })

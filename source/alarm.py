@@ -43,6 +43,13 @@ class Alarm:
             * stopped - breaks out of the method and stops the alarm    
         """       
         self.last_gone_off = time()
+        # if an alarm is already going off do nothing, or if an alarm is snoozed replace it
+        if Alarm.current:
+            if Alarm.current.going_off:
+                return
+            if Alarm.current is not self:
+                Alarm.current.stop()
+        post('https://talley-timepiece.vercel.app/go_off')
         Alarm.current = self
         while True:
             # check for stop
