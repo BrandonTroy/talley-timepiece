@@ -1,5 +1,5 @@
 :root {
-    --background: black;
+    --background: #3a3a3a;
     --foreground-1: white;
     --foreground-2: grey;
 }
@@ -20,12 +20,12 @@ body {
 
 h1 {
     width: fit-content;
-    margin: 2rem auto 0.5rem;
+    margin: 1.5rem auto 0.5rem;
 }
 
 #time {
     width: fit-content;
-    margin: 4rem auto 1rem;
+    margin: 3rem auto 0.75rem;
     font-size: 3rem;
 }
 
@@ -33,18 +33,19 @@ h1 {
     display: block;
     width: fit-content;
     margin: 0 auto;
+    margin-bottom: 0.35rem;
 }
 
 #timezone-dropdown {
     display: block;
-    margin: 0.25rem auto;
+    margin: 0 auto 1.5rem;
 }
 
 
 .alarm {
     display: flex;
     justify-content: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
 }
 
 .alarm-time {
@@ -90,4 +91,26 @@ h1 {
 ion-icon {
     width: 1rem;
     height: 1rem;
+}
+
+#alarm-sound-dropdown {
+    display: block;
+    margin: 0 auto;
+    width: 8rem;
+}
+
+.buttons {
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 4rem;
+}
+
+button {
+    border: none;
+    border-radius: 0.75rem;
+    background-color: var(--foreground-2);
+    font-size: 1.1rem;
+    padding: 0.75rem 1.25rem;
+    margin-right: 0.75rem;
+    cursor: pointer;
 }

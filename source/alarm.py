@@ -7,7 +7,7 @@ import os
 class Alarm:
     counter = 0
     current = None
-    audio_file_path = "audio/mixkit-rooster-crowing-in-the-morning-2462.wav"
+    audio_file_path = "audio/rooster.wav"
     
     def __init__(self, _time: datetime, days: list, active: bool):
         self.time = _time
@@ -51,7 +51,7 @@ class Alarm:
                 Alarm.current.stop()
         # start alarm
         Alarm.current = self
-        for i in range(30):
+        while True:
             # check for stop
             if self._stop_event.is_set():
                 self._stop_event.clear()
@@ -65,7 +65,7 @@ class Alarm:
                 self._snooze_event.clear()
                 self.snoozed = True
                 self.going_off = False
-                sleep(5)
+                sleep(10)
                 self.snoozed = False
                 self.go_off()
                 break

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytz
 from threading import Thread
 from alarm import Alarm
-from requests import get
+from requests import get, post
 from json import loads
 import drivers
 import RPi.GPIO as GPIO
@@ -57,12 +57,19 @@ class App:
             result = get(App.SERVER_URL + '/api/pi')
             data = loads(result.text)
             App.timezone = data['timezone']
+            Alarm.audio_file_path = 'audio/' + data['alarm_sound']
             Alarm.counter = 0
             # update alarms only if they have changed
             for i, alarm in enumerate(map(Alarm.from_json, data['alarms'])):
                 if alarm != App.alarms[i]:
                     App.alarms[i].stop()
                     App.alarms[i] = alarm
+            # check for snooze or stop from server
+            if Alarm.current:
+                if data['stop']:
+                    Alarm.current.stop()
+                elif data['snooze']:
+                    Alarm.current.snooze()
             print("REQUEST:", result)
             print(data)
             sleep(1)
@@ -78,8 +85,10 @@ class App:
             if Alarm.current:
                 if Alarm.current.snoozed:
                     Alarm.current.stop()
+                    post(App.SERVER_URL + '/stop')
                 else:
                     Alarm.current.snooze()
+                    post(App.SERVER_URL + '/snooze')
             # wait for button up press (falling edge)
             while GPIO.input(37) == GPIO.HIGH:
                 sleep(0.1)

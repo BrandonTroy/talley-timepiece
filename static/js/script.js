@@ -14,6 +14,11 @@ const alarm1Active = document.getElementById("alarm-1-active");
 const alarm2Time = document.getElementById("alarm-2-time");
 // const alarm2Days = document.getElementById("alarm-2-days");
 const alarm2Active = document.getElementById("alarm-2-active");
+const alarmSound = document.getElementById("alarm-sound-dropdown");
+
+const buttons = document.querySelector(".buttons");
+const snoozeButton = document.getElementById("snooze");
+const stopButton = document.getElementById("stop");
 
 
 // api request to get recommended timezone based on ip address
@@ -39,12 +44,12 @@ fetch("https://ipapi.co/timezone")
     });
 
 
-
 // updates the time on the page
 function updateTime() {
     let time = new Date().toLocaleTimeString('en', {timeStyle: "medium", timeZone: currentTimezone});
     document.getElementById("time").innerHTML = time;
 }
+
 
 // checks if the clients hasn't pinged the server in 10 seconds
 function updateConnectionStatus() {
@@ -56,6 +61,7 @@ function updateConnectionStatus() {
         disconnectedStatus.style.display = "none";
     }
 }
+
 
 // syncs the client data with the server data
 function syncToServer() {
@@ -70,7 +76,7 @@ function syncToServer() {
 
             lastPing = json.last_ping;
             updateConnectionStatus();
-
+            
             if (json.alarms.length > 0) {
                 alarm1Time.value = json.alarms[0][0];
                 // alarm1Days.value = json.alarms[0][1];
@@ -80,6 +86,17 @@ function syncToServer() {
                 alarm2Time.value = json.alarms[1][0];
                 // alarm2Days.value = json.alarms[1][1];
                 alarm2Active.checked = json.alarms[1][2];
+            }
+
+            if (json.going_off) {
+                buttons.style.visibility = "visible";
+            } else {
+                buttons.style.visibility = "hidden";
+            }
+            if (json.snoozed) {
+                snoozeButton.disabled = true;
+            } else {
+                snoozeButton.disabled = false;
             }
         });
 }
@@ -102,11 +119,11 @@ function sendAlarmData() {
                 alarm2Time.value,
                 null,
                 alarm2Active.checked
-            ]
+            ],
+            sound: alarmSound.value
         })
     });
 }
-sendAlarmData();
 
 alarm1Time.addEventListener("change", sendAlarmData);
 // alarm1Days.addEventListener("change", sendAlarmData);
@@ -114,6 +131,7 @@ alarm1Active.addEventListener("change", sendAlarmData);
 alarm2Time.addEventListener("change", sendAlarmData);
 // alarm2Days.addEventListener("change", sendAlarmData);
 alarm2Active.addEventListener("change", sendAlarmData);
+alarmSound.addEventListener("change", sendAlarmData);
 
 
 // updates the timezone when the dropdown is changed
@@ -130,12 +148,25 @@ dropdown.addEventListener("change", event => {
 });
 
 
+snoozeButton.addEventListener("click", event => {
+    fetch("/snooze", { method: "POST" });
+    snoozeButton.disabled = true;
+});
+
+stopButton.addEventListener("click", event => {
+    fetch("/stop", { method: "POST" });
+    buttons.style.visibility = "hidden";
+});
+
+if (document.currentScript.getAttribute("data-going-off") === "False") {
+    buttons.style.visibility = "hidden";
+}
 
 
 // updates the displayed time every second
 updateTime();
-setInterval(updateTime, 1000);
+setInterval(updateTime, 250);
 
-// updates client data every 5 seconds
+// updates client data every 2 seconds
 syncToServer();
-setInterval(syncToServer, 5000);
+setInterval(syncToServer, 2000);

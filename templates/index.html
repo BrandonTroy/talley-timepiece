@@ -25,12 +25,9 @@
             {% endif %}
         {% endfor %}
     </select>
-    <br>
-    <br>
     
 
     <label class="label">Alarms</label>
-    <br>
     <div class="alarm">
         <input type="time" class="alarm-time" id="alarm-1-time" name="alarm-time" value="00:00">
         <!-- <select id="alarm-1-days" class="alarm-days">
@@ -60,11 +57,31 @@
         <label class="alarm-active-label" for="alarm-2-active">Active</label>
     </div>
 
+    <br>
+    <label class="label" for="alarm-sound-dropdown">Alarm Sound</label>
+    <select id="alarm-sound-dropdown" title="alarm-sound">
+        {% for sound in sounds %}
+            {% if sound == current_sound %}
+                <option value="{{ sound }}" selected>{{ sound[:sound.find('.')] }}</option>
+            {% else %}
+                <option value="{{ sound }}">{{ sound[:sound.find('.')] }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <div class="buttons">
+        {% if not snoozed %}
+            <button id="snooze">Snooze</button>
+        {% else %}
+            <button id="snooze" disabled>Snooze</button>
+        {% endif %}
+        <button id="stop">Stop</button>
+    </div>
 
     <!-- ionicons import -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}" data-last-ping="{{ last_ping }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" data-timezone="{{ current_timezone }}" data-last-ping="{{ last_ping }}" data-going-off="{{ going_off }}"></script>
 </body>
 </html>
