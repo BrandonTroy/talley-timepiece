@@ -1,19 +1,22 @@
-# Clock
+# Tally Timepiece
 
-- refactored server.py to app.py
-- added database.txt to store last set timezone
-- refactored app.py to read and write current timezone from database
-- changed script.js to not autmoatically set the recommended timezone as the default but instead use a variable passed from the HTML
-- TODO: add funtionality to set and update alarms
-- TODO: refactor timezone selector to have button for 'auto-locate' instead of putting recommendation as first selection
-- TODO: make dedicated database that stores current timezone, separate from vercel because it vercel creates multiple serverless instaces of the app so there are multiple possible values the website can display OR change to single instance hosting solution
+The Talley Timepiece is a 3D-printed remotely controllable alarm clock, developed for the NCSU First-Year Engineering Design Competition, earning a podium finish.
 
-<br>
+### Features
+- Shows the current time and state of up to two different alarms on a physical display
+- A configurable timezone (defaults based on current location)
+- A choice of 3 different alarm sounds that are played by the device
+- Snoozing alarms via a button on the device
+- A grandfather-clock-style pendulum that ticks every second
+- Fully controllable from a mobile device or PC using a web app
 
-- Updated alarm.py
-    - Alarms wil go off when the time equals their set time
-    - Alarms can be snoozed with one button input, stopped with another
-    - Alarms handle overlap
-        - If an alarm is snoozed new alarm replaces it
-        - If an alarm is going off new alarm is ignored
-    - alarms.py and client.py are in ***test mode*** right now (hardware code that only runs on pi is replaced with print statements)
+### Components
+
+- **Raspberry Pi 3B**: the controller for the device, connected to peripherals and hosts the API so the web app can communicate with it.
+- **API**: A Flask server running on the Raspberry Pi that exposes the timezone and alarms to be updated
+- **UI**: A vanilla HTML/CSS/JS web app (hosted with Vercel) that shows connection status, and allows for viewing/updating of timezone and alarms on the clock
+- **Peripherals**
+    - **LCD Display**: 2x15 character display used to show the current time and alarm state
+    - **GPIO Button**: used for the physical snooze/cancel button
+    - **Speaker**: a portable USB speaker used to play the alarm sound
+    - **Servo Motor**: used to swing the pendulum
